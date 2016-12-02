@@ -26,14 +26,50 @@ def parser(inf1, inf2, outf):
     with open(inf1,'rb') as r1, open(inf2,'rb') as r2, open(outf,'w',encoding='utf-8') as w:
         rBytes = 0 # Bytes Readed form File
         tp = 0 # total progress per 10%
-        for line in r1:
-            lSize = len(line)
+        cDiffLines = 0 # total different lines
+        skip = False # skip read new line while diff
+        tmp_i = 0 # temp count
+        pause = True # pause parser
+        
+        for r1line in r1:
+            lSize = len(r1line)
             rBytes = rBytes + lSize
             tp = int(rBytes / size * 100)
             bar.update(tp)
+            
+            r1line_str= str(r1line.decode(encoding='utf-8',errors='replace')).strip() # avoid UnicodeDecodeError
+            #print('r1line: ' + r1line_str)
+            
+            #tmp_i += 1
+            #if tmp_i > 100000:
+            #    break
+            
+            if not skip:
+                r2line=r2.readline()
+                r2line=r2line.decode(encoding='utf-8',errors='replace') # avoid UnicodeDecodeError
+                r2line_str=str(r2line) # avoid UnicodeDecodeError
+                r2line_str=r2line_str.strip()
+                #print('r2line: ' + r2line_str)
+                
+            #print(r1line_str.find(r2line_str))
+            
+            if r1line_str.find(r2line_str) == -1:
+                cDiffLines += 1
+                w.write(r1line_str + '\n')
+                skip = True
+                #print('r1line: ' + r1line_str)
+                #print('r2line_diff: ' + r2line_str)
+                if pause:
+                    #input()
+                    pause = False
+            else:
+                skip = False
+                pause = True
+            
+            
     bar.finish() 
-    print("Total " + str(cLines) + " lines.")
-    print("Total " + str(cHeaders) + " headers.")
+    print("Total " + str(cDiffLines) + " lines.")
+    #print("Total " + str(cHeaders) + " headers.")
     print('Done!')
 
 # current datetime (for suffix)
