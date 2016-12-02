@@ -23,7 +23,7 @@ def parser(inf1, inf2, outf):
     bar = progressbar.ProgressBar(maxval, \
     widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
     bar.start()
-    with open(inf1,'rb') as r1, open(inf2,'rb') as r2, open(outf,'w',encoding='utf-8') as w:
+    with open(inf1,'rb') as r1, open(inf2,'rb') as r2, open(outf,'wb') as w:
         rBytes = 0 # Bytes Readed form File
         tp = 0 # total progress per 10%
         cDiffLines = 0 # total different lines
@@ -55,7 +55,7 @@ def parser(inf1, inf2, outf):
             
             if r1line_str.find(r2line_str) == -1:
                 cDiffLines += 1
-                w.write(r1line_str + '\n')
+                w.write(r1line)
                 skip = True
                 #print('r1line: ' + r1line_str)
                 #print('r2line_diff: ' + r2line_str)
