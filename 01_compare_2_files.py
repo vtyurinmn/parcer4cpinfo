@@ -73,7 +73,7 @@ def parser(inf1, inf2, out_sh, out_diff):
             
             
     bar.finish() 
-    print("Total " + str(total_lines) + " headers.")
+    print("Total " + str(total_lines) + " lines in 1st file.")
     print("Total " + str(total_equal_lines) + " equal lines.")
     print("Total " + str(cDiffLines) + " different lines.")
     print("Check Sum: " + str(cDiffLines + total_equal_lines))
